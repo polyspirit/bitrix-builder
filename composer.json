@@ -1,0 +1,22 @@
+{
+    "name": "polyspirit/bitrix-builders",
+    "description": "Builder classes for bitrix's IBlock and ISection",
+    "type": "package",
+    "require": {
+        "php": ">=7.3.0"
+    },
+    "license": "mit",
+    "authors": [
+        {
+            "name": "Anton Karabut",
+            "email": "poly@polycreative.ru",
+            "homepage": "https://polyspirit.ru"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "polyspirit\\Bitrix\\Builder\\": "src/"
+        }
+    }
+}
