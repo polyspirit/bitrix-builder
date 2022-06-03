@@ -1,5 +1,5 @@
 {
-    "name": "polyspirit/bitrix-builders",
+    "name": "polyspirit/bitrix-builder",
     "description": "Builder classes for bitrix's IBlock and ISection",
     "type": "package",
     "require": {
