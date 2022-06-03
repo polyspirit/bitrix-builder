@@ -168,7 +168,7 @@ class IBlock
 
         $pictureId = $arItem['DETAIL_PICTURE'] ?? $arItem['PREVIEW_PICTURE'];
     
-        $arItem['PICTURE_SRC'] = Tools::getResizeImageSrc($pictureId, $this->sizes);
+        $arItem['PICTURE_SRC'] = self::getResizeImageSrc($pictureId, $this->sizes);
 
         if (isset($closure)) {
             $closure($arItem);
