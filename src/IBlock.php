@@ -16,7 +16,7 @@ use \Bitrix\Iblock\IblockTable;
 /**
  * Class IBlock
  * @package polyspirit\Bitrix\Builder
- * @version 1.0
+ * @version 1.1
  */
 class IBlock
 {
@@ -175,6 +175,26 @@ class IBlock
         }
     
         return $arItem;
+    }
+
+
+    // ADD
+    public function add(array $fields, array $props = [])
+    {
+        if (empty($fields['IBLOCK_ID'])) {
+            $fields['IBLOCK_ID'] = $this->iblockId;
+        }
+
+        $fields['PROPERTY_VALUES'] = $props;
+
+        $el = new \CIBlockElement;
+        $id = $el->Add($fields);
+
+        if (!$id) {
+            throw new \Exception('Element addition error: ' . $el->LAST_ERROR, 400);
+        }
+
+        return $id;
     }
 
 
