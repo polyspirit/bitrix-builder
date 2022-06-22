@@ -9,28 +9,17 @@
 
 namespace polyspirit\Bitrix\Builder;
 
-use CIBlockResult;
-
 \Bitrix\Main\Loader::includeModule('iblock');
 
 /**
  * Class ISection
  * @package polyspirit\Bitrix\Builder
- * @version 1.0
+ * @version 1.2
  */
 class ISection extends IBlock
 {
 
-    protected function getElementListResult(): CIBlockResult
-    {
-        return \CIBlockSection::GetList(
-            $this->sort,
-            $this->filter,
-            false,
-            $this->fields,
-            $this->navs
-        );
-    }
+    protected string $mainClass = \CIBlockSection::class;
 
     public function getDefaultSubsections(string $rootSectionCode): array
     {
@@ -57,13 +46,39 @@ class ISection extends IBlock
 
     public function getSectionIdByCode(string $code, $siteId = SITE_ID)
     {
-        $res = \CIBlockSection::GetList(
+        $res = $this->mainClass::GetList(
             [], 
             ['IBLOCK_ID' => $this->iblockId, 'CODE' => $code, 'SITE_ID' => $siteId]
         );
         $section = $res->Fetch();
         
         return $section["ID"];
+    }
+
+    
+    // ADD & MODIFY
+    protected function addOrUpdate(array $fields, array $props = [], $id = null)
+    {
+        if (empty($fields['IBLOCK_ID'])) {
+            $fields['IBLOCK_ID'] = $this->iblockId;
+        }
+
+        $sect = new $this->mainClass;
+
+        $method = '';
+        if (is_null($id) || empty($id)) {
+            $method = 'addition';
+            $result = $sect->Add($fields);
+        } else {
+            $method = 'update';
+            $result = $sect->Update($id, $fields);
+        }
+
+        if (!$result) {
+            throw new \Exception('Section ' . $method . ' error: ' . $sect->LAST_ERROR, 400);
+        }
+
+        return $result;
     }
 
 

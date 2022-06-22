@@ -16,11 +16,14 @@ use \Bitrix\Iblock\IblockTable;
 /**
  * Class IBlock
  * @package polyspirit\Bitrix\Builder
- * @version 1.1
+ * @version 1.2
  */
 class IBlock
 {
+    protected string $mainClass = \CIBlockElement::class;
+
     protected int $iblockId;
+    protected int $lastElementId;
     protected $obResult;
 
     protected $filter = [];
@@ -146,7 +149,7 @@ class IBlock
 
     protected function getElementListResult()
     {
-        return \CIBlockElement::GetList(
+        return $this->mainClass::GetList(
             $this->sort,
             $this->filter,
             false,
@@ -178,23 +181,56 @@ class IBlock
     }
 
 
-    // ADD
-    public function add(array $fields, array $props = [])
+    // ADD & MODIFY
+    protected function addOrUpdate(array $fields, array $props = [], $id = null)
     {
         if (empty($fields['IBLOCK_ID'])) {
             $fields['IBLOCK_ID'] = $this->iblockId;
         }
 
-        $fields['PROPERTY_VALUES'] = $props;
+        $el = new $this->mainClass;
 
-        $el = new \CIBlockElement;
-        $id = $el->Add($fields);
-
-        if (!$id) {
-            throw new \Exception('Element addition error: ' . $el->LAST_ERROR, 400);
+        $method = '';
+        if (is_null($id) || empty($id)) {
+            $method = 'addition';
+            $fields['PROPERTY_VALUES'] = $props;
+            $result = $el->Add($fields);
+        } else {
+            $method = 'update';
+            $result = $el->Update($id, $fields);
+            $this->mainClass::SetPropertyValuesEx($id, false, $props);
         }
 
-        return $id;
+        if (!$result) {
+            throw new \Exception('Element ' . $method . ' error: ' . $el->LAST_ERROR, 400);
+        }
+
+        return $result;
+    }
+
+    public function add(array $fields, array $props = []): int
+    {
+        $id = $this->addOrUpdate($fields, $props);
+        $this->lastElementId = (int)$id;
+
+        return $this->lastElementId;
+    }
+
+    public function update($id, array $fields, array $props = []): bool
+    {
+        $this->lastElementId = (int)$id;
+
+        return $this->addOrUpdate($fields, $props, $id);
+    }
+
+    public function delete($id = null): bool
+    {
+        if (is_null($id) || empty($id)) {
+            $id = $this->lastElementId;
+        }
+        $this->lastElementId = $id;
+
+        return $this->mainClass::Delete($id);
     }
 
 
@@ -207,7 +243,7 @@ class IBlock
     public function getPropertySubQuery(string $propName, string $propValue): array
     {
         return [
-            'ID' => \CIBlockElement::SubQuery(
+            'ID' => $this->mainClass::SubQuery(
                 'ID', [
                     'IBLOCK_ID' => $this->iblockId, 
                     'PROPERTY_' . $propName => $propValue
