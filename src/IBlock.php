@@ -16,7 +16,7 @@ use \Bitrix\Iblock\IblockTable;
 /**
  * Class IBlock
  * @package polyspirit\Bitrix\Builder
- * @version 1.2.1
+ * @version 1.2.2
  */
 class IBlock
 {
@@ -116,7 +116,7 @@ class IBlock
     }
 
     // ELEMENTS
-    public function getElement($closure = null): array
+    public function getElement(?\Closure $closure = null): array
     {
         $elem = [];
 
@@ -132,7 +132,7 @@ class IBlock
         return $elem;
     }
 
-    public function getElements($closure = null): array
+    public function getElements(?\Closure $closure = null): array
     {
         $elements = [];
 
@@ -164,7 +164,7 @@ class IBlock
      * 
      * @return array
      */
-    protected function getElementInfo($obItem, $closure = null): array
+    protected function getElementInfo($obItem, ?\Closure $closure): array
     {
         $arItem = $obItem->GetFields();
         $arItem['PROPS'] = $obItem->GetProperties();
@@ -235,6 +235,9 @@ class IBlock
 
 
     // OTHER
+    /**
+     * @return \CIBlockResult|int
+     */
     public function getObResult()
     {
         return $this->obResult;
@@ -252,7 +255,7 @@ class IBlock
         ];
     }
 
-    public function includeMeta($elementId)
+    public function includeMeta($elementId): void
     {
         global $APPLICATION;
         $meta = new \Bitrix\Iblock\InheritedProperty\ElementValues($this->iblockId, $elementId); 
