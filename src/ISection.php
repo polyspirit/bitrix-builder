@@ -32,7 +32,7 @@ class ISection extends IBlock
         return $this->getElements();
     }
 
-    protected function getElementInfo($obItem, $closure = null): array
+    protected function getElementInfo($obItem, ?\Closure $closure): array
     {
         $arItem = $obItem->GetFields();
         $arItem['PICTURE_SRC'] = parent::getResizeImageSrc($arItem['PICTURE'], $this->sizes);
@@ -83,7 +83,7 @@ class ISection extends IBlock
 
 
     // OTHER
-    public function includeMeta($elementId)
+    public function includeMeta($elementId): void
     {
         global $APPLICATION;
         $meta = new \Bitrix\Iblock\InheritedProperty\SectionValues($this->iblockId, $elementId); 
