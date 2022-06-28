@@ -16,7 +16,7 @@ use \Bitrix\Iblock\IblockTable;
 /**
  * Class IBlock
  * @package polyspirit\Bitrix\Builder
- * @version 1.2
+ * @version 1.2.1
  */
 class IBlock
 {
@@ -38,12 +38,12 @@ class IBlock
     /**
      * @param int|string $iblockId id or code
      */
-    public function __construct($iblockId)
+    public function __construct($iblockId, string $siteId = SITE_ID)
     {
         if (is_int($iblockId) || ctype_digit($iblockId)) {
             $this->iblockId = intval($iblockId);
         } else {
-            $this->iblockId = self::getIdByCode($iblockId);
+            $this->iblockId = self::getIdByCode($iblockId, $siteId);
         }
     }
 
