@@ -128,6 +128,23 @@ public IBlock::sizes(array $array): IBlock
 $iBlock->sizes(['width' => 1280, 'height' => 720])->getElements();
 ```
 
+#### IBlock::params
+Set all properties in one array
+```php
+public IBlock::params(array $array): IBlock
+```
+```php
+// example: 
+$params = [
+    'sort' => ['ID' => 'DESC'],
+    'filter' => ['>=TIMESTAMP_X' => date('Y-m-d h:i:s', 'yesterday')],
+    'navs' => ['nPageSize' => 4, 'iNumPage' => 1, 'checkOutOfRange' => true],
+    'fields' => ['NAME', 'CODE'],
+    'sizes' => ['width' => 1280, 'height' => 720]
+];
+$iBlock->params($params)->getElements();
+```
+
 ### GET
 
 #### IBlock::getElement
