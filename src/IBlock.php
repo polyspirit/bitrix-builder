@@ -270,6 +270,18 @@ class IBlock
         }
     }
 
+    public function getListIdByXmlId(string $xmlId): string
+    {
+        $typeLocationOb = \CIBlockPropertyEnum::GetList(
+            ['sort' => 'ASC'],
+            ['IBLOCK_ID ' => $this->iblockId, 'XML_ID' => $xmlId]
+        );
+
+        $typeLocation = $typeLocationOb->GetNext();
+
+        return $typeLocation['ID'];
+    }
+
 
     // STATIC
     /**
