@@ -14,7 +14,7 @@ namespace polyspirit\Bitrix\Builder;
 /**
  * Class ISection
  * @package polyspirit\Bitrix\Builder
- * @version 1.2.2
+ * @version 1.2.3
  */
 class ISection extends IBlock
 {
