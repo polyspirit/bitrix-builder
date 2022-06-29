@@ -14,12 +14,23 @@ namespace polyspirit\Bitrix\Builder;
 /**
  * Class ISection
  * @package polyspirit\Bitrix\Builder
- * @version 1.2
+ * @version 1.2.2
  */
 class ISection extends IBlock
 {
 
     protected string $mainClass = \CIBlockSection::class;
+
+    protected function getElementListResult()
+    {
+        return $this->mainClass::GetList(
+            $this->sort,
+            $this->filter,
+            false,
+            $this->fields,
+            $this->navs
+        );
+    }
 
     public function getDefaultSubsections(string $rootSectionCode): array
     {
