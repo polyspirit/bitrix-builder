@@ -46,7 +46,10 @@ class ISection extends IBlock
     protected function getElementInfo($obItem, ?\Closure $closure): array
     {
         $arItem = $obItem->GetFields();
-        $arItem['PICTURE_SRC'] = parent::getResizeImageSrc($arItem['PICTURE'], $this->sizes);
+
+        $pictureId = $arItem['DETAIL_PICTURE'] ?? $arItem['PICTURE'];
+        
+        $arItem['PICTURE_SRC'] = parent::getResizeImageSrc($pictureId, $this->sizes);
 
         if (isset($closure)) {
             $closure($arItem);
