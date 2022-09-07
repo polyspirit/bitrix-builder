@@ -147,7 +147,9 @@ class IBlock
             $elements[] = $this->getElementInfo($obItem, $closure);
         }
 
-        $this->lastElementId = $elements[count($elements) - 1]['ID'];
+        if ($elements) {
+            $this->lastElementId = $elements[count($elements) - 1]['ID'];
+        }
 
         return $elements;
     }
