@@ -10,13 +10,14 @@
 namespace polyspirit\Bitrix\Builder;
 
 use \Bitrix\Iblock\IblockTable;
+use \Bitrix\Iblock\InheritedProperty\ElementValues;
 
 \Bitrix\Main\Loader::includeModule('iblock');
 
 /**
  * Class IBlock
  * @package polyspirit\Bitrix\Builder
- * @version 1.2.3
+ * @version 1.2.4
  */
 class IBlock
 {
@@ -129,6 +130,8 @@ class IBlock
             $elem = $this->getElementInfo($obItem, $closure);
         }
 
+        $this->lastElementId = $elem['ID'];
+
         return $elem;
     }
 
@@ -143,6 +146,8 @@ class IBlock
         while ($obItem = $this->obResult->GetNextElement()) {        
             $elements[] = $this->getElementInfo($obItem, $closure);
         }
+
+        $this->lastElementId = $elements[count($elements) - 1]['ID'];
 
         return $elements;
     }
@@ -255,11 +260,18 @@ class IBlock
         ];
     }
 
-    public function includeMeta($elementId): void
+    public function includeMeta($elementId = null): void
     {
         global $APPLICATION;
-        $meta = new \Bitrix\Iblock\InheritedProperty\ElementValues($this->iblockId, $elementId); 
-        $metaValues = $meta->getValues();
+        $metaValues = $this->getMetaValues($elementId);
+
+        if (!empty($metaValues['ELEMENT_PAGE_TITLE'])) {
+            $APPLICATION->SetPageProperty('h1', $metaValues['ELEMENT_PAGE_TITLE']);
+        }
+
+        if (!empty($metaValues['ELEMENT_META_TITLE'])) {
+            $APPLICATION->SetTitle($metaValues['ELEMENT_META_TITLE']);
+        }
 
         if (!empty($metaValues['ELEMENT_META_DESCRIPTION'])) {
             $APPLICATION->SetPageProperty('description', $metaValues['ELEMENT_META_DESCRIPTION']);
@@ -268,6 +280,13 @@ class IBlock
         if (!empty($metaValues['ELEMENT_META_KEYWORDS'])) {
             $APPLICATION->SetPageProperty('keywords', $metaValues['ELEMENT_META_KEYWORDS']);
         }
+    }
+
+    public function getMetaValues($elementId = null): array
+    {
+        $meta = new ElementValues($this->iblockId, $elementId ?? $this->lastElementId); 
+
+        return $meta->getValues();
     }
 
     public function getListIdByXmlId(string $xmlId): string

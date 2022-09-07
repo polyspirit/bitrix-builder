@@ -9,12 +9,14 @@
 
 namespace polyspirit\Bitrix\Builder;
 
+use \Bitrix\Iblock\InheritedProperty\SectionValues;
+
 \Bitrix\Main\Loader::includeModule('iblock');
 
 /**
  * Class ISection
  * @package polyspirit\Bitrix\Builder
- * @version 1.2.3
+ * @version 1.2.4
  */
 class ISection extends IBlock
 {
@@ -97,19 +99,11 @@ class ISection extends IBlock
 
 
     // OTHER
-    public function includeMeta($elementId): void
+    public function getMetaValues($elementId = null): array
     {
-        global $APPLICATION;
-        $meta = new \Bitrix\Iblock\InheritedProperty\SectionValues($this->iblockId, $elementId); 
-        $metaValues = $meta->getValues();
+        $meta = new SectionValues($this->iblockId, $elementId ?? $this->lastElementId); 
 
-        if (!empty($metaValues['ELEMENT_META_DESCRIPTION'])) {
-            $APPLICATION->SetPageProperty('description', $metaValues['ELEMENT_META_DESCRIPTION']);
-        }
-
-        if (!empty($metaValues['ELEMENT_META_KEYWORDS'])) {
-            $APPLICATION->SetPageProperty('keywords', $metaValues['ELEMENT_META_KEYWORDS']);
-        }
+        return $meta->getValues();
     }
 
 }
