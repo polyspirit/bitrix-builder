@@ -130,7 +130,9 @@ class IBlock
             $elem = $this->getElementInfo($obItem, $closure);
         }
 
-        $this->lastElementId = $elem['ID'];
+        if ($elem) {
+            $this->lastElementId = $elem['ID'];
+        }
 
         return $elem;
     }
