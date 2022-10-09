@@ -16,7 +16,7 @@ use \Bitrix\Iblock\InheritedProperty\SectionValues;
 /**
  * Class ISection
  * @package polyspirit\Bitrix\Builder
- * @version 1.2.4
+ * @version 1.2.5
  */
 class ISection extends IBlock
 {

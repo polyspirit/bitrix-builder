@@ -17,7 +17,7 @@ use \Bitrix\Iblock\InheritedProperty\ElementValues;
 /**
  * Class IBlock
  * @package polyspirit\Bitrix\Builder
- * @version 1.2.4
+ * @version 1.2.5
  */
 class IBlock
 {
@@ -303,6 +303,11 @@ class IBlock
         $typeLocation = $typeLocationOb->GetNext();
 
         return $typeLocation['ID'];
+    }
+
+    public function getIblockId()
+    {
+        return $this->iblockId;
     }
 
 
