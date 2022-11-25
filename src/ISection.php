@@ -99,6 +99,28 @@ class ISection extends IBlock
 
 
     // OTHER
+    public function includeMeta($elementId = null): void
+    {
+        global $APPLICATION;
+        $metaValues = $this->getMetaValues($elementId);
+
+        if (!empty($metaValues['SECTION_PAGE_TITLE'])) {
+            $APPLICATION->SetPageProperty('h1', $metaValues['SECTION_PAGE_TITLE']);
+        }
+
+        if (!empty($metaValues['SECTION_META_TITLE'])) {
+            $APPLICATION->SetTitle($metaValues['SECTION_META_TITLE']);
+        }
+
+        if (!empty($metaValues['SECTION_META_DESCRIPTION'])) {
+            $APPLICATION->SetPageProperty('description', $metaValues['SECTION_META_DESCRIPTION']);
+        }
+
+        if (!empty($metaValues['SECTION_META_KEYWORDS'])) {
+            $APPLICATION->SetPageProperty('keywords', $metaValues['SECTION_META_KEYWORDS']);
+        }
+    }
+    
     public function getMetaValues($elementId = null): array
     {
         $meta = new SectionValues($this->iblockId, $elementId ?? $this->lastElementId); 
